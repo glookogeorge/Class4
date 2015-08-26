@@ -1,0 +1,63 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart',
+                   'Implementation-Version': version
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}
+
+task compile << {
+    println 'compiling source'
+}
+
+task compileTest(dependsOn: compile) << {
+    println 'compiling unit tests'
+}
+
+task runTests(dependsOn: [compile, compileTest]) << {
+    println 'running tests'
+}
+
+task dist(dependsOn: [compile, test, main]) << {
+    println 'building the distribution'
+}
+
+sourceSets {
+    
+    main {
+        java {
+            srcDirs = ["src/org/george"]
+        }
+    }    
+
+    test {
+        java {
+            srcDirs = ["src/test"]  
+        }
+    }
+}
+
